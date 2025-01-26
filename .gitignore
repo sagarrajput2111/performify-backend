@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+#just for learning
+/src/main/java/com/performify/performifybackend/Controller.java
+/src/main/resources/application.properties
