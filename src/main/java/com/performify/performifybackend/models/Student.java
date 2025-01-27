@@ -14,9 +14,15 @@ public class Student {
 
     private String name;
     private String rollNumber;
+
+    private String standard;
+    private String section;
+    private String stream;
+
     @ManyToOne
     @JoinColumn(name="address_id",nullable = false)
     private Address address;
+
 
     public Student() {
     }

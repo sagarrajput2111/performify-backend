@@ -15,6 +15,7 @@ public class Teacher {
 
     private String name;
     private String department;
+    private String subject;
     @JoinColumn(name="address_id",nullable = false)
     @ManyToOne
     private Address address;
