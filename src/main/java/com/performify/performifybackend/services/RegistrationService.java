@@ -3,6 +3,8 @@ package com.performify.performifybackend.services;
 import com.performify.performifybackend.dto.PendingRequests;
 import com.performify.performifybackend.dto.RegistrationForm;
 import com.performify.performifybackend.models.*;
+import com.performify.performifybackend.repository.PendingRegistrationRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,9 +13,15 @@ import java.util.Optional;
 
 @Service
 public class RegistrationService {
+private PendingRegistrationRepo pendingRegistrationRepo;
 
+   @Autowired
+   public  RegistrationService(PendingRegistrationRepo pendingRegistrationRepo)
+    {
+        this.pendingRegistrationRepo=pendingRegistrationRepo;
 
-    private ArrayList<PendingRegistration> pendingRegistrations=new ArrayList<>();
+    }
+    private List<PendingRegistration> pendingRegistrations=new ArrayList<>();
 
     public void register(RegistrationForm registrationForm)
     {
@@ -33,12 +41,14 @@ public class RegistrationService {
         pendingRegistration.setStandard(registrationForm.getStandard());
         pendingRegistration.setSubject(registrationForm.getSubject());
         pendingRegistration.setStream(registrationForm.getStream());
-        pendingRegistrations.add(pendingRegistration);
+        pendingRegistrationRepo.save(pendingRegistration);
 
     }
 
     public List<PendingRequests> pendingRequests()
     {
+
+        pendingRegistrations= pendingRegistrationRepo.findAll();
         ArrayList<PendingRequests> pendingRequestList=new ArrayList<>();
         pendingRegistrations.stream().filter(registration->
         {
@@ -58,6 +68,7 @@ public class RegistrationService {
             pendingRequest.setSubject(registration.getSubject());
             pendingRequest.setPostalCode(registration.getPostalCode());
             pendingRequest.setLastName(registration.getLastName());
+            pendingRequest.setDateOfBirth(registration.getDateOfBirth());
             pendingRequestList.add(pendingRequest);
 
         });
@@ -67,6 +78,13 @@ public class RegistrationService {
 
     public String approve(String username)
     {
+        PendingRegistration pendingRegistration=pendingRegistrationRepo.findByUsername(username).get();
+        if(pendingRegistration!=null) {
+            pendingRegistration.setApproved(true);
+            pendingRegistrationRepo.save(pendingRegistration);
+
+        }
+        /*
         pendingRegistrations.forEach(p->{
             System.out.println(p.getUsername().trim().equals(username.trim()));
         });
@@ -78,13 +96,16 @@ public class RegistrationService {
 
         if (optionalPending.isPresent()) {
             System.out.println("not present");
-            PendingRegistration pending = optionalPending.get();
+//            PendingRegistration pending = optionalPending.get();
             pending.setApproved(true); // Update the approved status
             return "Registration for " + username + " approved successfully.";
         } else {
             System.out.println("not present");
             return "No pending registration found for username: " + username;
         }
+
+        */
+        return "Approved";
 
     }
 

@@ -1,22 +1,43 @@
 package com.performify.performifybackend.models;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.Date;
 
+@Entity
+@Table(name = "PendingRegistration")
 public class PendingRegistration {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+
+    @Column(nullable = false, unique = true)
     private String username;
+    @Column(nullable = false, unique = true)
     private String email;
+    @Column(nullable = false)
     private String password;
     // Student/Teacher fields
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Role role;  // 'student' or 'teacher' to differentiate
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
+    @Column(nullable = false)
     private Date dateOfBirth;
 
     // Address fields
+    @Column(nullable = false)
     private String street;
+    @Column(nullable = false)
     private String city;
+    @Column(nullable = false)
     private String state;
+    @Column(nullable = false)
     private String postalCode;
 
     //student specific
