@@ -5,6 +5,8 @@ import com.performify.performifybackend.dto.RegistrationForm;
 import com.performify.performifybackend.models.*;
 import com.performify.performifybackend.repository.PendingRegistrationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,14 +16,29 @@ import java.util.Optional;
 @Service
 public class RegistrationService {
 private PendingRegistrationRepo pendingRegistrationRepo;
-
-   @Autowired
-   public  RegistrationService(PendingRegistrationRepo pendingRegistrationRepo)
-    {
-        this.pendingRegistrationRepo=pendingRegistrationRepo;
-
+private UserService userService;
+private List<PendingRegistration> pendingRegistrations;
+private StudentService studentService;
+private TeacherService teacherService;
+private PrincipalService principalService;
+    @Autowired
+    public RegistrationService(PendingRegistrationRepo pendingRegistrationRepo, UserService userService, StudentService studentService, TeacherService teacherService, PrincipalService principalService) {
+        this.pendingRegistrationRepo = pendingRegistrationRepo;
+        this.userService = userService;
+        this.studentService = studentService;
+        this.teacherService = teacherService;
+        this.principalService = principalService;
     }
-    private List<PendingRegistration> pendingRegistrations=new ArrayList<>();
+
+
+
+//   public  RegistrationService(PendingRegistrationRepo pendingRegistrationRepo,  UserService userService)
+//    {
+//        this.pendingRegistrationRepo=pendingRegistrationRepo;
+//        this.userService=userService;
+//
+//    }
+
 
     public void register(RegistrationForm registrationForm)
     {
@@ -47,7 +64,7 @@ private PendingRegistrationRepo pendingRegistrationRepo;
 
     public List<PendingRequests> pendingRequests()
     {
-
+        pendingRegistrations=new ArrayList<>();
         pendingRegistrations= pendingRegistrationRepo.findAll();
         ArrayList<PendingRequests> pendingRequestList=new ArrayList<>();
         pendingRegistrations.stream().filter(registration->
@@ -82,6 +99,11 @@ private PendingRegistrationRepo pendingRegistrationRepo;
         if(pendingRegistration!=null) {
             pendingRegistration.setApproved(true);
             pendingRegistrationRepo.save(pendingRegistration);
+//            userService.registerUser(pendingRegistration);
+            triggerCreationWorkFlow(pendingRegistration);
+
+
+
 
         }
         /*
@@ -109,6 +131,18 @@ private PendingRegistrationRepo pendingRegistrationRepo;
 
     }
 
+    public void triggerCreationWorkFlow(PendingRegistration pendingRegistration)
+    {
+        userService.registerUser(pendingRegistration);
+        switch (pendingRegistration.getRole()){
+            case STUDENT -> studentService.registerStudent(pendingRegistration);
+            case TEACHER -> teacherService.registerTeacher(pendingRegistration);
+            case PRINCIPAL -> principalService.registerPrincipal(pendingRegistration);
+        }
+
+
+    }
+
     //first we need to send the form for approval to principal/directors
 
 //    public Address registerAddress(RegistrationForm registrationForm)
@@ -116,11 +150,7 @@ private PendingRegistrationRepo pendingRegistrationRepo;
 //        Address address=new Address(registrationForm.getStreet(), registrationForm.getCity(), registrationForm.getState(), registrationForm.getPostalCode());
 //        return address;
 //    }
-//    public void registerUser(RegistrationForm registrationForm)
-//    {
-//        User user=new User(registrationForm.getUsername(), registrationForm.getPassword(),registrationForm.getRole());
-//
-//    }
+
 //
 //    public void registerStudent(RegistrationForm registrationForm)
 //    {

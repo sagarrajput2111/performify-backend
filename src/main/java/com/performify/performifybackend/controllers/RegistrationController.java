@@ -4,6 +4,7 @@ import com.performify.performifybackend.dto.PendingRequests;
 import com.performify.performifybackend.dto.RegistrationForm;
 import com.performify.performifybackend.services.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class RegistrationController {
     }
 
 
+    @PreAuthorize("hasAuthority('STUDENT')")
     @PostMapping("/register")
     public String register(@RequestBody RegistrationForm registrationForm)
     {
@@ -30,6 +32,7 @@ public class RegistrationController {
 //        return registrationForm.toString();
     }
 
+    @PreAuthorize("hasAuthority('STUDENT')")
     @GetMapping("/approve/{username}")
     public String approveRegistration(@PathVariable String username)
     {
@@ -38,6 +41,7 @@ public class RegistrationController {
 
     }
 
+    @PreAuthorize("hasAuthority('STUDENT')")
     @GetMapping("/pending")
     public List<PendingRequests> pendingRequests()
     {
