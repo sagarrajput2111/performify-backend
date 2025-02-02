@@ -12,7 +12,8 @@ public class Student {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;  // One-to-One relationship with User for authentication
 
-    private String name;
+    private String firstName;
+    private String lastName;
     private String rollNumber;
 
     private String standard;
@@ -27,11 +28,23 @@ public class Student {
     public Student() {
     }
 
-    public Student(User user, String name, String rollNumber, Address address) {
+    public Student(User user, String firstName, String lastName, String rollNumber, String standard, String section, String stream, Address address) {
         this.user = user;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.rollNumber = rollNumber;
+        this.standard = standard;
+        this.section = section;
+        this.stream = stream;
         this.address = address;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public User getUser() {
@@ -42,12 +55,20 @@ public class Student {
         this.user = user;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getRollNumber() {
@@ -58,11 +79,50 @@ public class Student {
         this.rollNumber = rollNumber;
     }
 
+    public String getStandard() {
+        return standard;
+    }
+
+    public void setStandard(String standard) {
+        this.standard = standard;
+    }
+
+    public String getSection() {
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
+    }
+
+    public String getStream() {
+        return stream;
+    }
+
+    public void setStream(String stream) {
+        this.stream = stream;
+    }
+
     public Address getAddress() {
         return address;
     }
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", user=" + user +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", rollNumber='" + rollNumber + '\'' +
+                ", standard='" + standard + '\'' +
+                ", section='" + section + '\'' +
+                ", stream='" + stream + '\'' +
+                ", address=" + address +
+                '}';
     }
 }

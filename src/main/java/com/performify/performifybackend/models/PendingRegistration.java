@@ -43,6 +43,10 @@ public class PendingRegistration {
     //student specific
     private String standard;
     private String stream;
+    private  String rollNo;
+    private String section;
+
+
 
     //teacher Specific
     private String department;
@@ -51,7 +55,29 @@ public class PendingRegistration {
     //for approval
     private boolean approved = false; // Default to false
     private LocalDateTime createdAt = LocalDateTime.now();
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getRollNo() {
+        return rollNo;
+    }
+
+    public void setRollNo(String rollNo) {
+        this.rollNo = rollNo;
+    }
+
+    public String getSection() {
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
+    }
     public String getUsername() {
         return username;
     }
@@ -186,5 +212,31 @@ public class PendingRegistration {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "PendingRegistration{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", standard='" + standard + '\'' +
+                ", stream='" + stream + '\'' +
+                ", rollNo='" + rollNo + '\'' +
+                ", section='" + section + '\'' +
+                ", department='" + department + '\'' +
+                ", subject='" + subject + '\'' +
+                ", approved=" + approved +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

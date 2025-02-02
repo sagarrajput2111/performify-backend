@@ -21,13 +21,16 @@ private List<PendingRegistration> pendingRegistrations;
 private StudentService studentService;
 private TeacherService teacherService;
 private PrincipalService principalService;
+private AddressService addressService;
+
     @Autowired
-    public RegistrationService(PendingRegistrationRepo pendingRegistrationRepo, UserService userService, StudentService studentService, TeacherService teacherService, PrincipalService principalService) {
+    public RegistrationService(PendingRegistrationRepo pendingRegistrationRepo, UserService userService, StudentService studentService, TeacherService teacherService, PrincipalService principalService,AddressService addressService) {
         this.pendingRegistrationRepo = pendingRegistrationRepo;
         this.userService = userService;
         this.studentService = studentService;
         this.teacherService = teacherService;
         this.principalService = principalService;
+        this.addressService=addressService;
     }
 
 
@@ -58,6 +61,8 @@ private PrincipalService principalService;
         pendingRegistration.setStandard(registrationForm.getStandard());
         pendingRegistration.setSubject(registrationForm.getSubject());
         pendingRegistration.setStream(registrationForm.getStream());
+        pendingRegistration.setRollNo(registrationForm.getRollNo());
+        pendingRegistration.setSection(registrationForm.getSection());
         pendingRegistrationRepo.save(pendingRegistration);
 
     }
@@ -97,6 +102,7 @@ private PrincipalService principalService;
     {
         PendingRegistration pendingRegistration=pendingRegistrationRepo.findByUsername(username).get();
         if(pendingRegistration!=null) {
+            System.out.println(pendingRegistration);
             pendingRegistration.setApproved(true);
             pendingRegistrationRepo.save(pendingRegistration);
 //            userService.registerUser(pendingRegistration);
@@ -133,11 +139,12 @@ private PrincipalService principalService;
 
     public void triggerCreationWorkFlow(PendingRegistration pendingRegistration)
     {
-        userService.registerUser(pendingRegistration);
+        User user=userService.registerUser(pendingRegistration);
+        Address address=addressService.registerAddress(pendingRegistration);
         switch (pendingRegistration.getRole()){
-            case STUDENT -> studentService.registerStudent(pendingRegistration);
-            case TEACHER -> teacherService.registerTeacher(pendingRegistration);
-            case PRINCIPAL -> principalService.registerPrincipal(pendingRegistration);
+            case STUDENT -> studentService.registerStudent(pendingRegistration,address,user);
+            case TEACHER -> teacherService.registerTeacher(pendingRegistration,address,user);
+            case PRINCIPAL -> principalService.registerPrincipal(pendingRegistration,address,user);
         }
 
 

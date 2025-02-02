@@ -17,11 +17,12 @@ public class UserService {
         this.userRepo = userRepo;
     }
 
-    public void registerUser(PendingRegistration pendingRegistration)
+    public User registerUser(PendingRegistration pendingRegistration)
     {
         PasswordEncoder passwordEncoder=new BCryptPasswordEncoder(12);
         User user=new User(pendingRegistration.getUsername(),passwordEncoder.encode(pendingRegistration.getPassword()) ,pendingRegistration.getRole());
         userRepo.save(user);
+        return user;
 
     }
 }

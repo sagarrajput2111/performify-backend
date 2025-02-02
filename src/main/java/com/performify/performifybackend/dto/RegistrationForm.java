@@ -28,6 +28,9 @@ public class RegistrationForm {
     private String standard;
     private String stream;
 
+    private String rollNo;
+    private String section;
+
     //teacher Specific
     private String department;
     private String subject;
@@ -176,6 +179,22 @@ public class RegistrationForm {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public String getRollNo() {
+        return rollNo;
+    }
+
+    public void setRollNo(String rollNo) {
+        this.rollNo = rollNo;
+    }
+
+    public String getSection() {
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
     }
 }
 

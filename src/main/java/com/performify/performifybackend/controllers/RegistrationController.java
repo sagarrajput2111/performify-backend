@@ -23,7 +23,7 @@ public class RegistrationController {
     }
 
 
-    @PreAuthorize("hasAuthority('STUDENT')")
+
     @PostMapping("/register")
     public String register(@RequestBody RegistrationForm registrationForm)
     {
